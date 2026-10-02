@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block title %}AI Book Recommendation & Assistant - Book Nest{% endblock %}
+
+{% block content %}
+<section style="padding:60px 0 40px;background:var(--bg-cream-soft);border-bottom:1px solid var(--border-color);">
+  <div class="nest-container">
+    <div style="max-width:800px;margin:0 auto;text-align:center;">
+      <div class="hero-badge">
+        <i class="bi bi-robot"></i> Smart AI Literary Matchmaker
+      </div>
+      <h1 style="font-size:3rem;margin-bottom:14px;">Find Your Next Unforgettable Read</h1>
+      <p style="font-size:1.15rem;color:var(--text-muted);line-height:1.7;">
+        Welcome to your personal AI librarian. Tell us your mood, reading pace, and preferred themes, and we'll curate the perfect literary journey for you.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section style="padding:60px 0;">
+  <div class="nest-container">
+    <div style="display:grid;grid-template-columns:1fr 1.1fr;gap:50px;">
+      
+      <!-- Preference Questionnaire & Interactive Chat -->
+      <div>
+        <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:32px;margin-bottom:30px;box-shadow:var(--shadow-sm);">
+          <h2 style="font-size:1.4rem;margin-bottom:20px;display:flex;align-items:center;gap:10px;">
+            <i class="bi bi-sliders2-vertical" style="color:var(--primary);"></i> Tell Us Your Preferences
+          </h2>
+
+          <form method="GET" action="{% url 'core:ai_recommendations' %}">
+            <div style="margin-bottom:18px;">
+              <label style="font-size:0.88rem;font-weight:700;display:block;margin-bottom:8px;">What feeling or mood are you seeking?</label>
+              <select name="mood" style="width:100%;padding:10px;border-radius:var(--radius-sm);border:1px solid var(--border-color);background:#FFF;outline:none;">
+                <option value="">Any Mood</option>
+                <option value="inspiring" {% if selected_mood == 'inspiring' %}selected{% endif %}>✨ Deeply Inspiring & Transformative</option>
+                <option value="escapist" {% if selected_mood == 'escapist' %}selected{% endif %}>🌌 Escapist, Magical & Epic Worlds</option>
+                <option value="thrilling" {% if selected_mood == 'thrilling' %}selected{% endif %}>⚡ Fast-Paced, Mysterious & Suspenseful</option>
+                <option value="academic" {% if selected_mood == 'academic' %}selected{% endif %}>🧠 Intellectual, Analytical & Academic</option>
+              </select>
+            </div>
+
+            <div style="margin-bottom:18px;">
+              <label style="font-size:0.88rem;font-weight:700;display:block;margin-bottom:8px;">Favorite Genre</label>
+              <select name="genre" style="width:100%;padding:10px;border-radius:var(--radius-sm);border:1px solid var(--border-color);background:#FFF;outline:none;">
+                <option value="">All Genres</option>
+                {% for cat in categories %}
+                  <option value="{{ cat.name }}" {% if selected_genre == cat.name %}selected{% endif %}>{{ cat.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div style="margin-bottom:18px;">
+              <label style="font-size:0.88rem;font-weight:700;display:block;margin-bottom:8px;">Specific Theme or Keyword</label>
+              <input type="text" name="theme" value="{{ query_theme }}" placeholder="e.g. artificial intelligence, medieval drama, habit building..." style="width:100%;padding:10px;border-radius:var(--radius-sm);border:1px solid var(--border-color);outline:none;">
+            </div>
+
+            <button type="submit" class="btn-primary" style="width:100%;justify-content:center;padding:12px;">
+              <i class="bi bi-magic"></i> Generate Recommendations
+            </button>
+          </form>
+        </div>
+
+        <!-- Live Interactive AI Librarian Chat -->
+        <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:30px;box-shadow:var(--shadow-sm);">
+          <h2 style="font-size:1.3rem;margin-bottom:16px;display:flex;align-items:center;gap:10px;">
+            <i class="bi bi-chat-quote-fill" style="color:var(--primary);"></i> Chat with AI Assistant
+          </h2>
+
+          <div id="chat-window" style="height:250px;overflow-y:auto;background:var(--bg-cream-soft);border:1px solid var(--border-color);border-radius:var(--radius-sm);padding:14px;margin-bottom:16px;display:flex;flex-direction:column;gap:12px;">
+            <div style="background:#FFF;padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--border-color);max-width:85%;">
+              <p style="margin:0;font-size:0.9rem;">Hello! I am your Nest AI Companion. Tell me what books you enjoyed recently or what theme you want to dive into today!</p>
+            </div>
+          </div>
+
+          <form id="ai-chat-form" style="display:flex;gap:8px;">
+            <input type="text" id="chat-input" placeholder="Type: 'Suggest a fast thriller set in winter'..." style="flex:1;padding:10px 14px;border-radius:var(--radius-full);border:1px solid var(--border-color);outline:none;font-size:0.9rem;">
+            <button type="submit" class="btn-primary" style="padding:10px 18px;border-radius:var(--radius-full);"><i class="bi bi-send-fill"></i></button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Recommendation Results -->
+      <div>
+        <div style="margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;">
+          <h2 style="font-size:1.6rem;margin:0;">Curated AI Matches</h2>
+          <span style="font-size:0.85rem;color:var(--text-muted);">{{ recommended_books|length }} Books Matched</span>
+        </div>
+
+        <div class="book-grid" style="grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));">
+          {% for book in recommended_books %}
+            <div class="book-card">
+              <div class="book-cover-wrap">
+                <span class="book-badge-tag" style="background:var(--primary);">AI Match</span>
+                <button class="card-fav-btn ajax-toggle-fav" data-book-id="{{ book.id }}" title="Favorite">
+                  <i class="bi bi-heart"></i>
+                </button>
+                <a href="{% url 'core:book_detail' slug=book.slug %}">
+                  <img src="{% if book.cover_image %}{{ book.cover_image.url }}{% else %}/static/images/default_cover.svg{% endif %}" alt="{{ book.title }}" class="book-cover-img" loading="lazy">
+                </a>
+              </div>
+
+              <div class="book-category-tag">{{ book.category.name }}</div>
+              <h3 class="book-card-title"><a href="{% url 'core:book_detail' slug=book.slug %}">{{ book.title }}</a></h3>
+              <p class="book-card-author">{{ book.author.name }}</p>
+
+              <div class="book-rating">
+                <i class="bi bi-star-fill"></i>
+                <span>{{ book.average_rating }}</span>
+              </div>
+
+              <div class="book-price-row">
+                <span class="book-price">Rs. {{ book.discount_price|default:book.price }}</span>
+                <button class="btn-primary ajax-add-cart" data-book-id="{{ book.id }}" style="padding:6px 10px;font-size:0.8rem;" title="Add to Cart">
+                  <i class="bi bi-cart-plus"></i>
+                </button>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('ai-chat-form')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const input = document.getElementById('chat-input');
+  const chatWindow = document.getElementById('chat-window');
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  // Add user bubble
+  const userBubble = document.createElement('div');
+  userBubble.style.cssText = 'background:var(--primary);color:#FFF;padding:10px 14px;border-radius:var(--radius-sm);margin-left:auto;max-width:85%;font-size:0.9rem;';
+  userBubble.textContent = msg;
+  chatWindow.appendChild(userBubble);
+  input.value = '';
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+
+  try {
+    const res = await fetch('/api/ai-chat/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken
+      },
+      body: JSON.stringify({ message: msg })
+    });
+    const data = await res.json();
+    
+    // Add bot response
+    const botBubble = document.createElement('div');
+    botBubble.style.cssText = 'background:#FFF;padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--border-color);max-width:85%;font-size:0.9rem;';
+    
+    let booksHtml = '';
+    if (data.books && data.books.length > 0) {
+      booksHtml = '<div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;">' +
+        data.books.map(b => `<a href="${b.url}" style="color:var(--primary);font-weight:700;display:block;">📖 ${b.title} <span style="color:#666;font-weight:normal;">by ${b.author} (Rs. ${b.price})</span></a>`).join('') +
+        '</div>';
+    }
+    
+    botBubble.innerHTML = `<p style="margin:0;">${data.reply}</p>${booksHtml}`;
+    chatWindow.appendChild(botBubble);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  } catch (err) {
+    console.error(err);
+  }
+});
+</script>
+{% endblock %}

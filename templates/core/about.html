@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block title %}About Us - The Literary Sanctuary of Book Nest{% endblock %}
+
+{% block content %}
+<!-- About Hero -->
+<section style="padding:70px 0 50px;background:var(--bg-cream-soft);border-bottom:1px solid var(--border-color);">
+  <div class="nest-container">
+    <div class="hero-grid">
+      <div>
+        <span class="book-category-tag">Our Legacy & Soul</span>
+        <h1 style="font-size:3.2rem;margin-bottom:16px;">Where Every Word Inspires a New Horizon.</h1>
+        <p style="font-size:1.2rem;color:var(--text-muted);line-height:1.7;margin-bottom:20px;">
+          <strong>Book Nest Motto:</strong> <em>"Where every page brings you home."</em>
+        </p>
+        <p style="color:var(--text-muted);font-size:1.05rem;line-height:1.7;">
+          Founded with a fervent belief in the transformative magic of physical pages and insightful storytelling, Book Nest bridges timeless literary classics with cutting-edge digital intelligence.
+        </p>
+      </div>
+
+      <div style="border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-lg);border:4px solid #FFF;">
+        <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=900&q=80" alt="Book Nest Sanctuary" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Our Story & Mission -->
+<section style="padding:80px 0;">
+  <div class="nest-container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;">
+      <div>
+        <span class="book-category-tag">Our Story</span>
+        <h2 style="font-size:2.4rem;margin-bottom:18px;">From a Cozy Corner to a Global Sanctuary</h2>
+        <p style="color:var(--text-muted);font-size:1.05rem;line-height:1.8;margin-bottom:16px;">
+          What began as an intimate haven for neighborhood bibliophiles in 2018 has expanded into an internationally acclaimed literary nest. We believe books are not merely objects; they are vessels carrying human consciousness across centuries.
+        </p>
+        <p style="color:var(--text-muted);font-size:1.05rem;line-height:1.8;">
+          Every spine on our shelves is chosen with rigorous editorial dedication, ensuring readers find works that ignite curiosity, provide solace, and foster lifelong wisdom.
+        </p>
+      </div>
+
+      <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:36px;box-shadow:var(--shadow-sm);">
+        <span class="book-category-tag">Our Mission</span>
+        <h3 style="font-size:1.8rem;margin-bottom:16px;">Cultivating the Joy of Reading</h3>
+        <p style="color:var(--text-muted);font-size:1rem;line-height:1.7;margin-bottom:20px;">
+          Our mission is to empower readers of all generations by connecting them with profound literature through personalized curation, ethical sourcing, and seamless modern technology.
+        </p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:12px;">
+          <li style="display:flex;align-items:center;gap:10px;font-weight:600;"><i class="bi bi-check-circle-fill" style="color:var(--primary);"></i> 100% Authentic, High-Grade Editions</li>
+          <li style="display:flex;align-items:center;gap:10px;font-weight:600;"><i class="bi bi-check-circle-fill" style="color:var(--primary);"></i> Climate-Neutral Packaging & Shipping</li>
+          <li style="display:flex;align-items:center;gap:10px;font-weight:600;"><i class="bi bi-check-circle-fill" style="color:var(--primary);"></i> AI-Assisted Personalized Discovery</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- What We Offer & Why Choose Us -->
+<section style="padding:80px 0;background:var(--bg-cream-soft);">
+  <div class="nest-container">
+    <div style="text-align:center;max-width:650px;margin:0 auto 50px;">
+      <span class="book-category-tag">Excellence & Values</span>
+      <h2 style="font-size:2.4rem;">Why Readers Choose Book Nest</h2>
+      <p style="color:var(--text-muted);">Combining the warmth of an indie bookstore with Fortune 500 digital reliability.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:24px;">
+      <div style="background:var(--bg-card);padding:28px;border-radius:var(--radius-md);border:1px solid var(--border-color);">
+        <div style="width:48px;height:48px;background:var(--primary-light);color:var(--primary);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:16px;">
+          <i class="bi bi-shield-check"></i>
+        </div>
+        <h3 style="font-size:1.2rem;margin-bottom:10px;">Enterprise Security</h3>
+        <p style="color:var(--text-muted);font-size:0.92rem;line-height:1.6;">Your privacy and data are safeguarded by state-of-the-art encryption and strictly audited layers.</p>
+      </div>
+
+      <div style="background:var(--bg-card);padding:28px;border-radius:var(--radius-md);border:1px solid var(--border-color);">
+        <div style="width:48px;height:48px;background:var(--primary-light);color:var(--primary);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:16px;">
+          <i class="bi bi-truck"></i>
+        </div>
+        <h3 style="font-size:1.2rem;margin-bottom:10px;">Swift Express Delivery</h3>
+        <p style="color:var(--text-muted);font-size:0.92rem;line-height:1.6;">Hand-packaged in protective bubble boxes so your books arrive in collector-grade perfection.</p>
+      </div>
+
+      <div style="background:var(--bg-card);padding:28px;border-radius:var(--radius-md);border:1px solid var(--border-color);">
+        <div style="width:48px;height:48px;background:var(--primary-light);color:var(--primary);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:16px;">
+          <i class="bi bi-robot"></i>
+        </div>
+        <h3 style="font-size:1.2rem;margin-bottom:10px;">AI Book Matchmaker</h3>
+        <p style="color:var(--text-muted);font-size:0.92rem;line-height:1.6;">Never wonder what to read next with personalized mood-based AI recommendations.</p>
+      </div>
+
+      <div style="background:var(--bg-card);padding:28px;border-radius:var(--radius-md);border:1px solid var(--border-color);">
+        <div style="width:48px;height:48px;background:var(--primary-light);color:var(--primary);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:16px;">
+          <i class="bi bi-arrow-repeat"></i>
+        </div>
+        <h3 style="font-size:1.2rem;margin-bottom:10px;">Hassle-Free Returns</h3>
+        <p style="color:var(--text-muted);font-size:0.92rem;line-height:1.6;">Enjoy our transparent 14-day return and exchange policy for total reading confidence.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Meet Our Curators Sliding Gallery -->
+<section style="padding:80px 0;">
+  <div class="nest-container">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;">
+      <div>
+        <span class="book-category-tag">The Literary Minds</span>
+        <h2 style="font-size:2.2rem;margin:0;">Meet the Curators & Authors</h2>
+      </div>
+    </div>
+
+    <!-- Sliding Gallery -->
+    <div style="display:flex;gap:24px;overflow-x:auto;padding-bottom:16px;">
+      <div style="width:260px;flex-shrink:0;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-md);overflow:hidden;text-align:center;padding-bottom:20px;">
+        <div style="height:220px;overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=500&q=80" alt="Aditi Bohara" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <h4 style="font-size:1.1rem;margin:16px 0 4px;">Aditi Bohara</h4>
+        <p style="color:var(--primary);font-size:0.85rem;font-weight:700;margin:0 0 8px;">Lead Architect & Literary Director</p>
+        <span style="font-size:0.8rem;color:var(--text-light);">aditibohara.com.np</span>
+      </div>
+
+      <div style="width:260px;flex-shrink:0;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-md);overflow:hidden;text-align:center;padding-bottom:20px;">
+        <div style="height:220px;overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=500&q=80" alt="Julian Sterling" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <h4 style="font-size:1.1rem;margin:16px 0 4px;">Julian Sterling</h4>
+        <p style="color:var(--primary);font-size:0.85rem;font-weight:700;margin:0 0 8px;">Head of Classical Archiving</p>
+        <span style="font-size:0.8rem;color:var(--text-light);">Former Oxford Fellow</span>
+      </div>
+
+      <div style="width:260px;flex-shrink:0;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-md);overflow:hidden;text-align:center;padding-bottom:20px;">
+        <div style="height:220px;overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=500&q=80" alt="Elena Rostova" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <h4 style="font-size:1.1rem;margin:16px 0 4px;">Elena Rostova</h4>
+        <p style="color:var(--primary);font-size:0.85rem;font-weight:700;margin:0 0 8px;">Fiction & Thriller Specialist</p>
+        <span style="font-size:0.8rem;color:var(--text-light);">Book Prize Juror</span>
+      </div>
+
+      <div style="width:260px;flex-shrink:0;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-md);overflow:hidden;text-align:center;padding-bottom:20px;">
+        <div style="height:220px;overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=500&q=80" alt="Marcus Chen" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <h4 style="font-size:1.1rem;margin:16px 0 4px;">Marcus Chen</h4>
+        <p style="color:var(--primary);font-size:0.85rem;font-weight:700;margin:0 0 8px;">Sci-Tech & Educational Curator</p>
+        <span style="font-size:0.8rem;color:var(--text-light);">Tech Researcher</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action -->
+<section style="padding:80px 0;background:linear-gradient(135deg, #24140E 0%, #3B1F15 100%);color:#FFF;text-align:center;">
+  <div class="nest-container" style="max-width:700px;margin:0 auto;">
+    <h2 style="font-size:2.6rem;color:#FFF;margin-bottom:16px;">Begin Your Literary Adventure Today</h2>
+    <p style="color:#BBA99C;font-size:1.1rem;line-height:1.7;margin-bottom:30px;">
+      Browse thousands of hand-selected titles and let stories transform your perspective.
+    </p>
+    <a href="{% url 'core:category_list' %}" class="btn-primary" style="padding:14px 36px;font-size:1.05rem;">
+      Explore Book Nest Catalog <i class="bi bi-arrow-right"></i>
+    </a>
+  </div>
+</section>
+{% endblock %}

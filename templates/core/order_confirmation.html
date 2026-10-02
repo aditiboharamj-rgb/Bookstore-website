@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Order Confirmed - {{ order.order_number }} - Book Nest{% endblock %}
+
+{% block content %}
+<section style="padding:80px 0;text-align:center;">
+  <div class="nest-container" style="max-width:680px;margin:0 auto;">
+    <div style="width:80px;height:80px;background:#ECFDF5;color:#059669;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.4rem;margin:0 auto 24px;box-shadow:var(--shadow-sm);">
+      <i class="bi bi-check2-circle"></i>
+    </div>
+
+    <span class="book-category-tag" style="color:#059669;">Order Successfully Placed</span>
+    <h1 style="font-size:2.8rem;margin:10px 0 16px;">Thank You, {{ order.full_name }}!</h1>
+    <p style="font-size:1.1rem;color:var(--text-muted);line-height:1.7;margin-bottom:30px;">
+      Your literary voyage has commenced. We have received your order <strong>#{{ order.order_number }}</strong> and are hand-packing your books with utmost care.
+    </p>
+
+    <!-- Order Details Card -->
+    <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:32px;text-align:left;box-shadow:var(--shadow-sm);margin-bottom:36px;">
+      <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border-color);padding-bottom:14px;margin-bottom:16px;">
+        <div>
+          <span style="font-size:0.8rem;color:var(--text-light);text-transform:uppercase;">Order Number</span>
+          <p style="font-weight:800;margin:0;color:var(--primary);">#{{ order.order_number }}</p>
+        </div>
+        <div>
+          <span style="font-size:0.8rem;color:var(--text-light);text-transform:uppercase;">Payment Status</span>
+          <p style="font-weight:800;margin:0;color:#059669;">{{ order.payment_method }}</p>
+        </div>
+      </div>
+
+      <h4 style="font-size:1rem;margin-bottom:12px;">Ordered Books</h4>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">
+        {% for item in order.items.all %}
+          <div style="display:flex;justify-content:space-between;font-size:0.92rem;">
+            <span>{{ item.quantity }}x {{ item.book.title }}</span>
+            <span style="font-weight:700;">Rs. {{ item.price }}</span>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div style="border-top:1px solid var(--border-color);padding-top:14px;display:flex;justify-content:space-between;font-size:1.2rem;font-weight:800;">
+        <span>Total Amount:</span>
+        <span style="color:var(--primary);">Rs. {{ order.total_amount }}</span>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:16px;justify-content:center;">
+      <a href="{% url 'core:home' %}" class="btn-primary">Return to Homepage</a>
+      <a href="{% url 'core:category_list' %}" class="btn-secondary">Explore More Books</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

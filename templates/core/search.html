@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Search Books, Authors & Genres - Book Nest{% endblock %}
+
+{% block content %}
+<section style="padding:60px 0 40px;background:var(--bg-cream-soft);border-bottom:1px solid var(--border-color);">
+  <div class="nest-container">
+    <div style="max-width:800px;margin:0 auto;text-align:center;">
+      <span class="book-category-tag">Search & Explore</span>
+      <h1 style="font-size:2.8rem;margin-bottom:20px;">Search Books, Authors & Genres</h1>
+      
+      <!-- Search Form -->
+      <form method="GET" action="{% url 'core:search' %}" style="display:flex;gap:10px;background:var(--bg-card);padding:10px;border-radius:var(--radius-full);box-shadow:var(--shadow-md);border:1px solid var(--border-color);">
+        <div style="display:flex;align-items:center;padding-left:14px;flex:1;gap:10px;">
+          <i class="bi bi-search" style="color:var(--text-muted);font-size:1.2rem;"></i>
+          <input type="text" name="q" value="{{ query }}" placeholder="Search by Book Title, Author, Genre, or ISBN..." style="border:none;outline:none;width:100%;font-size:1rem;background:transparent;">
+        </div>
+
+        <select name="category" style="border:none;border-left:1px solid var(--border-color);padding:0 14px;outline:none;background:transparent;font-size:0.9rem;color:var(--text-muted);">
+          <option value="">All Categories</option>
+          {% for cat in categories %}
+            <option value="{{ cat.slug }}" {% if request.GET.category == cat.slug %}selected{% endif %}>{{ cat.name }}</option>
+          {% endfor %}
+        </select>
+
+        <button type="submit" class="btn-primary" style="padding:10px 28px;">Search</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- Search Results -->
+<section style="padding:60px 0;">
+  <div class="nest-container">
+    {% if query %}
+      <div style="margin-bottom:30px;">
+        <h2 style="font-size:1.6rem;margin-bottom:4px;">Search Results for "<span style="color:var(--primary);">{{ query }}</span>"</h2>
+        <p style="color:var(--text-muted);font-size:0.95rem;">Found {{ total_results }} matched literary works</p>
+      </div>
+    {% endif %}
+
+    {% if books %}
+      <div class="book-grid">
+        {% for book in books %}
+          <div class="book-card">
+            <div class="book-cover-wrap">
+              {% if book.is_bestseller %}
+                <span class="book-badge-tag">Bestseller</span>
+              {% endif %}
+              <button class="card-fav-btn ajax-toggle-fav" data-book-id="{{ book.id }}" title="Favorite">
+                <i class="bi bi-heart"></i>
+              </button>
+              <a href="{% url 'core:book_detail' slug=book.slug %}">
+                <img src="{% if book.cover_image %}{{ book.cover_image.url }}{% else %}/static/images/default_cover.svg{% endif %}" alt="{{ book.title }}" class="book-cover-img" loading="lazy">
+              </a>
+            </div>
+
+            <div class="book-category-tag">{{ book.category.name }}</div>
+            <h3 class="book-card-title"><a href="{% url 'core:book_detail' slug=book.slug %}">{{ book.title }}</a></h3>
+            <p class="book-card-author">{{ book.author.name }}</p>
+
+            <div class="book-rating">
+              <i class="bi bi-star-fill"></i>
+              <span>{{ book.average_rating }}</span>
+              <span style="color:var(--text-light);font-size:0.75rem;">({{ book.review_count }})</span>
+            </div>
+
+            <div class="book-price-row">
+              <div>
+                <span class="book-price">Rs. {{ book.discount_price|default:book.price }}</span>
+                {% if book.discount_price %}
+                  <span class="book-discount-price">Rs. {{ book.price }}</span>
+                {% endif %}
+              </div>
+              <div style="display:flex;gap:6px;">
+                <a href="{% url 'core:book_detail' slug=book.slug %}" class="btn-secondary" style="padding:8px 10px;font-size:0.8rem;" title="View Details">
+                  <i class="bi bi-eye"></i>
+                </a>
+                <button class="btn-primary ajax-add-cart" data-book-id="{{ book.id }}" style="padding:8px 12px;font-size:0.82rem;" title="Add to Cart">
+                  <i class="bi bi-cart-plus"></i> Add
+                </button>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <!-- Friendly No Results Box -->
+      <div style="text-align:center;padding:80px 20px;background:var(--bg-card);border-radius:var(--radius-lg);border:1px dashed var(--border-color);max-width:700px;margin:0 auto;">
+        <div style="width:70px;height:70px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 20px;">
+          <i class="bi bi-search-heart"></i>
+        </div>
+        <h3 style="font-size:1.8rem;margin-bottom:12px;">We couldn't find that book</h3>
+        <p style="color:var(--text-muted);font-size:1.05rem;line-height:1.6;margin-bottom:24px;">
+          Try searching by <strong>title</strong>, <strong>author</strong>, or <strong>genre</strong>. Or let our AI assistant discover an enchanting alternative for you!
+        </p>
+        <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+          <a href="{% url 'core:category_list' %}" class="btn-primary">Browse All Books</a>
+          <a href="{% url 'core:ai_recommendations' %}" class="btn-secondary">
+            <i class="bi bi-stars" style="color:var(--primary);"></i> AI Recommendation
+          </a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

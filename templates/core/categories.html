@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block title %}{% if current_category %}{{ current_category.name }} - Explore Books{% else %}Explore Our Books - Book Nest Collection{% endif %}{% endblock %}
+
+{% block content %}
+<section style="padding:50px 0 30px;background:var(--bg-cream-soft);border-bottom:1px solid var(--border-color);">
+  <div class="nest-container">
+    <div style="max-width:700px;">
+      <span class="book-category-tag">Literary Vault</span>
+      <h1 style="font-size:3rem;margin-bottom:12px;">Explore Our Books</h1>
+      <p style="font-size:1.15rem;color:var(--text-muted);">
+        Find your next book from our collection of timeless fiction, rare mysteries, academic treasures, and self-discovery manuals.
+      </p>
+    </div>
+
+    <!-- Category Pills Navigation -->
+    <div style="display:flex;gap:10px;overflow-x:auto;padding:24px 0 10px;scrollbar-width:none;">
+      <a href="{% url 'core:category_list' %}" class="btn-secondary" style="white-space:nowrap;padding:8px 18px;font-size:0.9rem;{% if not current_category %}background:var(--primary);color:#FFF !important;border-color:var(--primary);{% endif %}">
+        <i class="bi bi-collection"></i> All Categories
+      </a>
+      {% for cat in categories %}
+        <a href="{% url 'core:category_detail' slug=cat.slug %}" class="btn-secondary" style="white-space:nowrap;padding:8px 18px;font-size:0.9rem;{% if current_category and current_category.id == cat.id %}background:var(--primary);color:#FFF !important;border-color:var(--primary);{% endif %}">
+          <i class="bi {{ cat.icon }}"></i> {{ cat.name }}
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Filter & Main Book Grid Section -->
+<section style="padding:60px 0;">
+  <div class="nest-container">
+    <div style="display:grid;grid-template-columns:260px 1fr;gap:40px;">
+      
+      <!-- Sidebar Filters -->
+      <aside style="background:var(--bg-card);padding:24px;border-radius:var(--radius-md);border:1px solid var(--border-color);height:fit-content;">
+        <h3 style="font-size:1.2rem;margin-bottom:20px;border-bottom:1px solid var(--border-color);padding-bottom:10px;">Filter Books</h3>
+        
+        <form method="GET" action="">
+          {% if current_category %}
+            <input type="hidden" name="category" value="{{ current_category.slug }}">
+          {% endif %}
+
+          <div style="margin-bottom:20px;">
+            <label style="font-size:0.88rem;font-weight:700;display:block;margin-bottom:8px;">Search in category</label>
+            <div style="position:relative;">
+              <input type="text" name="q" value="{{ search_query }}" placeholder="Title or Author..." style="width:100%;padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--border-color);font-size:0.9rem;outline:none;">
+            </div>
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <label style="font-size:0.88rem;font-weight:700;display:block;margin-bottom:8px;">Sort By</label>
+            <select name="sort" style="width:100%;padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--border-color);font-size:0.9rem;background:var(--bg-cream);outline:none;">
+              <option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>Newest Releases</option>
+              <option value="bestseller" {% if sort_by == 'bestseller' %}selected{% endif %}>Bestsellers</option>
+              <option value="price_low" {% if sort_by == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+              <option value="price_high" {% if sort_by == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+              <option value="title_asc" {% if sort_by == 'title_asc' %}selected{% endif %}>Title (A - Z)</option>
+            </select>
+          </div>
+
+          <div style="margin-bottom:24px;">
+            <label style="font-size:0.88rem;font-weight:700;display:block;margin-bottom:8px;">Price Range (Rs.)</label>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <input type="number" name="min_price" placeholder="Min" value="{{ request.GET.min_price }}" style="width:50%;padding:8px;border-radius:var(--radius-sm);border:1px solid var(--border-color);font-size:0.85rem;">
+              <span>-</span>
+              <input type="number" name="max_price" placeholder="Max" value="{{ request.GET.max_price }}" style="width:50%;padding:8px;border-radius:var(--radius-sm);border:1px solid var(--border-color);font-size:0.85rem;">
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary" style="width:100%;justify-content:center;font-size:0.9rem;padding:10px;">
+            Apply Filters
+          </button>
+        </form>
+
+        <!-- Spotlight Featured Books -->
+        {% if featured_books %}
+          <div style="margin-top:36px;border-top:1px solid var(--border-color);padding-top:20px;">
+            <h4 style="font-size:1rem;margin-bottom:14px;">Featured Picks</h4>
+            {% for fbook in featured_books %}
+              <div style="display:flex;gap:12px;margin-bottom:14px;align-items:center;">
+                <div style="width:48px;aspect-ratio:2/3;border-radius:4px;overflow:hidden;flex-shrink:0;">
+                  <img src="{% if fbook.cover_image %}{{ fbook.cover_image.url }}{% else %}/static/images/default_cover.svg{% endif %}" alt="{{ fbook.title }}" style="width:100%;height:100%;object-fit:cover;">
+                </div>
+                <div>
+                  <a href="{% url 'core:book_detail' slug=fbook.slug %}" style="font-size:0.88rem;font-weight:700;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;">{{ fbook.title }}</a>
+                  <span style="font-size:0.82rem;color:var(--primary);font-weight:700;">Rs. {{ fbook.discount_price|default:fbook.price }}</span>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </aside>
+
+      <!-- Books Grid & Details -->
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+          <p style="color:var(--text-muted);font-size:0.95rem;margin:0;">
+            Showing <strong>{{ page_obj.start_index }}-{{ page_obj.end_index }}</strong> of <strong>{{ page_obj.paginator.count }}</strong> books
+          </p>
+        </div>
+
+        <div class="book-grid">
+          {% for book in books %}
+            <div class="book-card">
+              <div class="book-cover-wrap">
+                {% if book.is_bestseller %}
+                  <span class="book-badge-tag">Bestseller</span>
+                {% elif book.is_new_arrival %}
+                  <span class="book-badge-tag" style="background:#059669;">New</span>
+                {% endif %}
+                <button class="card-fav-btn ajax-toggle-fav" data-book-id="{{ book.id }}" title="Favorite">
+                  <i class="bi bi-heart"></i>
+                </button>
+                <a href="{% url 'core:book_detail' slug=book.slug %}">
+                  <img src="{% if book.cover_image %}{{ book.cover_image.url }}{% else %}/static/images/default_cover.svg{% endif %}" alt="{{ book.title }}" class="book-cover-img" loading="lazy">
+                </a>
+              </div>
+
+              <div class="book-category-tag">{{ book.category.name }}</div>
+              <h3 class="book-card-title"><a href="{% url 'core:book_detail' slug=book.slug %}">{{ book.title }}</a></h3>
+              <p class="book-card-author">{{ book.author.name }}</p>
+
+              <div class="book-rating">
+                <i class="bi bi-star-fill"></i>
+                <span>{{ book.average_rating }}</span>
+                <span style="color:var(--text-light);font-size:0.75rem;">({{ book.review_count }})</span>
+              </div>
+
+              <div class="book-price-row">
+                <div>
+                  <span class="book-price">Rs. {{ book.discount_price|default:book.price }}</span>
+                  {% if book.discount_price %}
+                    <span class="book-discount-price">Rs. {{ book.price }}</span>
+                  {% endif %}
+                </div>
+                <div style="display:flex;gap:6px;">
+                  <a href="{% url 'core:book_detail' slug=book.slug %}" class="btn-secondary" style="padding:8px 10px;font-size:0.8rem;" title="View Details">
+                    <i class="bi bi-eye"></i>
+                  </a>
+                  <button class="btn-primary ajax-add-cart" data-book-id="{{ book.id }}" style="padding:8px 12px;font-size:0.82rem;" title="Add to Cart">
+                    <i class="bi bi-cart-plus"></i> Add
+                  </button>
+                </div>
+              </div>
+            </div>
+          {% empty %}
+            <div style="grid-column: 1 / -1; text-align:center; padding: 60px 20px; background:var(--bg-card); border-radius:var(--radius-md); border:1px dashed var(--border-color);">
+              <i class="bi bi-journal-x" style="font-size:3rem; color:var(--primary);"></i>
+              <h3 style="font-size:1.6rem;margin-top:14px;">No books matched your criteria</h3>
+              <p style="color:var(--text-muted);margin:10px 0 20px;">Try adjusting your search terms, price filters, or category.</p>
+              <a href="{% url 'core:category_list' %}" class="btn-secondary">Clear Filters</a>
+            </div>
+          {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+          <div style="display:flex;justify-content:center;gap:8px;margin-top:50px;">
+            {% if page_obj.has_previous %}
+              <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="btn-secondary" style="padding:8px 16px;">
+                <i class="bi bi-chevron-left"></i> Prev
+              </a>
+            {% endif %}
+
+            <span style="display:inline-flex;align-items:center;padding:8px 16px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-full);font-weight:700;font-size:0.9rem;">
+              Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+              <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="btn-secondary" style="padding:8px 16px;">
+                Next <i class="bi bi-chevron-right"></i>
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

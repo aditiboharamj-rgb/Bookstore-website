@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Shopping Basket - Book Nest{% endblock %}
+
+{% block content %}
+<section style="padding:50px 0 30px;background:var(--bg-cream-soft);border-bottom:1px solid var(--border-color);">
+  <div class="nest-container">
+    <span class="book-category-tag">Your Sanctuary Basket</span>
+    <h1 style="font-size:2.8rem;margin-bottom:8px;">Shopping Basket</h1>
+    <p style="color:var(--text-muted);">Review your chosen books before embarking on checkout.</p>
+  </div>
+</section>
+
+<section style="padding:60px 0;">
+  <div class="nest-container">
+    {% if cart %}
+      <div style="display:grid;grid-template-columns:1.8fr 1fr;gap:40px;align-items:start;">
+        
+        <!-- Cart Items Table -->
+        <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-sm);">
+          <table style="width:100%;border-collapse:collapse;">
+            <thead>
+              <tr style="border-bottom:2px solid var(--bg-cream-soft);text-align:left;font-size:0.85rem;color:var(--text-light);text-transform:uppercase;">
+                <th style="padding:12px;">Book</th>
+                <th style="padding:12px;">Price</th>
+                <th style="padding:12px;text-align:center;">Quantity</th>
+                <th style="padding:12px;text-align:right;">Total</th>
+                <th style="padding:12px;text-align:center;">Remove</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in cart %}
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:16px 12px;">
+                    <div style="display:flex;align-items:center;gap:14px;">
+                      <div style="width:60px;aspect-ratio:2/3;border-radius:4px;overflow:hidden;flex-shrink:0;">
+                        <img src="{% if item.book.cover_image %}{{ item.book.cover_image.url }}{% else %}/static/images/default_cover.svg{% endif %}" alt="{{ item.book.title }}" style="width:100%;height:100%;object-fit:cover;">
+                      </div>
+                      <div>
+                        <h4 style="font-size:0.98rem;margin:0 0 4px;"><a href="{% url 'core:book_detail' slug=item.book.slug %}">{{ item.book.title }}</a></h4>
+                        <span style="font-size:0.82rem;color:var(--text-muted);">by {{ item.book.author.name }}</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td style="padding:16px 12px;font-weight:700;">
+                    Rs. {{ item.price }}
+                  </td>
+                  <td style="padding:16px 12px;text-align:center;">
+                    <div style="display:inline-flex;align-items:center;border:1px solid var(--border-color);border-radius:var(--radius-full);background:var(--bg-cream);">
+                      <form action="{% url 'core:cart_add' book_id=item.book.id %}" method="POST" style="margin:0;">
+                        {% csrf_token %}
+                        <input type="hidden" name="quantity" value="{{ item.quantity|add:'-1' }}">
+                        <input type="hidden" name="override" value="true">
+                        <button type="submit" style="border:none;background:transparent;padding:4px 10px;cursor:pointer;font-weight:bold;">−</button>
+                      </form>
+                      <span style="padding:0 8px;font-weight:700;font-size:0.9rem;">{{ item.quantity }}</span>
+                      <form action="{% url 'core:cart_add' book_id=item.book.id %}" method="POST" style="margin:0;">
+                        {% csrf_token %}
+                        <input type="hidden" name="quantity" value="{{ item.quantity|add:'1' }}">
+                        <input type="hidden" name="override" value="true">
+                        <button type="submit" style="border:none;background:transparent;padding:4px 10px;cursor:pointer;font-weight:bold;">+</button>
+                      </form>
+                    </div>
+                  </td>
+                  <td style="padding:16px 12px;text-align:right;font-weight:800;color:var(--primary);">
+                    Rs. {{ item.total_price }}
+                  </td>
+                  <td style="padding:16px 12px;text-align:center;">
+                    <a href="{% url 'core:cart_remove' book_id=item.book.id %}" style="color:var(--text-light);font-size:1.1rem;" title="Remove">
+                      <i class="bi bi-trash3"></i>
+                    </a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+          <div style="margin-top:20px;display:flex;justify-content:space-between;">
+            <a href="{% url 'core:category_list' %}" class="btn-secondary" style="font-size:0.9rem;">
+              <i class="bi bi-arrow-left"></i> Continue Shopping
+            </a>
+          </div>
+        </div>
+
+        <!-- Order Summary & Checkout -->
+        <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-sm);">
+          <h3 style="font-size:1.3rem;margin-bottom:20px;border-bottom:1px solid var(--border-color);padding-bottom:10px;">Order Summary</h3>
+          
+          <div style="display:flex;justify-content:space-between;margin-bottom:12px;font-size:0.95rem;">
+            <span style="color:var(--text-muted);">Subtotal</span>
+            <span style="font-weight:700;">Rs. {{ subtotal }}</span>
+          </div>
+
+          <div style="display:flex;justify-content:space-between;margin-bottom:12px;font-size:0.95rem;">
+            <span style="color:var(--text-muted);">Delivery Charge</span>
+            <span style="font-weight:700;">{% if delivery_fee == 0 %}FREE{% else %}Rs. {{ delivery_fee }}{% endif %}</span>
+          </div>
+
+          {% if delivery_fee > 0 %}
+            <p style="font-size:0.8rem;color:var(--primary);margin-bottom:14px;">
+              <i class="bi bi-info-circle"></i> Add books over Rs. 1500 for Free Delivery!
+            </p>
+          {% endif %}
+
+          <div style="border-top:1px solid var(--border-color);padding-top:16px;margin-top:16px;display:flex;justify-content:space-between;font-size:1.3rem;font-weight:800;color:var(--text-main);margin-bottom:24px;">
+            <span>Total</span>
+            <span style="color:var(--primary);">Rs. {{ total }}</span>
+          </div>
+
+          <a href="{% url 'core:checkout' %}" class="btn-primary" style="width:100%;justify-content:center;padding:14px;font-size:1.05rem;">
+            <span>Proceed to Checkout</span>
+            <i class="bi bi-arrow-right"></i>
+          </a>
+        </div>
+
+      </div>
+    {% else %}
+      <div style="text-align:center;padding:80px 20px;background:var(--bg-card);border-radius:var(--radius-lg);border:1px dashed var(--border-color);max-width:600px;margin:0 auto;">
+        <div style="width:70px;height:70px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 20px;">
+          <i class="bi bi-basket3"></i>
+        </div>
+        <h2 style="font-size:1.8rem;margin-bottom:10px;">Your Basket is Empty</h2>
+        <p style="color:var(--text-muted);margin-bottom:24px;">Discover masterpieces from our collection to begin reading.</p>
+        <a href="{% url 'core:category_list' %}" class="btn-primary">Explore Books</a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

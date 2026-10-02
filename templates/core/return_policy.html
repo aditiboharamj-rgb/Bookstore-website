@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Return & Refund Policy - Book Nest{% endblock %}
+
+{% block content %}
+<section style="padding:60px 0 40px;background:var(--bg-cream-soft);border-bottom:1px solid var(--border-color);">
+  <div class="nest-container">
+    <div style="max-width:800px;">
+      <span class="book-category-tag">Customer Assurance</span>
+      <h1 style="font-size:3rem;margin-bottom:12px;">Return & Refund Policy</h1>
+      <p style="font-size:1.15rem;color:var(--text-muted);">
+        At Book Nest, we hold our literary craftsmanship to the highest standards. Here is our comprehensive, transparent return policy.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section style="padding:70px 0;">
+  <div class="nest-container" style="max-width:900px;margin:0 auto;">
+    <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:40px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:32px;">
+      
+      <div>
+        <h3 style="font-size:1.4rem;color:var(--primary);margin-bottom:10px;"><i class="bi bi-clock-history"></i> Return Time Limit</h3>
+        <p style="color:var(--text-muted);line-height:1.7;">
+          You have up to <strong>14 calendar days</strong> from the date of physical delivery to initiate a return or exchange request for any eligible book purchased via Book Nest.
+        </p>
+      </div>
+
+      <div>
+        <h3 style="font-size:1.4rem;color:var(--primary);margin-bottom:10px;"><i class="bi bi-check2-circle"></i> Eligible Conditions for Return</h3>
+        <ul style="color:var(--text-muted);line-height:1.8;padding-left:20px;">
+          <li>The book is unread, undamaged, and in its original, pristine collector state.</li>
+          <li>Original protective packaging, bookmarks, or dust jackets are intact.</li>
+          <li>The item received arrived with manufacturing defects, missing pages, or shipping damage.</li>
+          <li>The book delivered differed from the edition or title ordered.</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 style="font-size:1.4rem;color:var(--primary);margin-bottom:10px;"><i class="bi bi-x-circle"></i> Non-Returnable Items</h3>
+        <ul style="color:var(--text-muted);line-height:1.8;padding-left:20px;">
+          <li>Digital eBooks or downloadable audio materials once downloaded.</li>
+          <li>Personalized / author-inscribed special collector copies.</li>
+          <li>Books with visible signs of spine cracking, highlighter markings, or dog-eared pages caused after receipt.</li>
+          <li>Items marked on final clearance sale.</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 style="font-size:1.4rem;color:var(--primary);margin-bottom:10px;"><i class="bi bi-cash-stack"></i> Refund Policy & Methods</h3>
+        <p style="color:var(--text-muted);line-height:1.7;">
+          Approved refunds will be credited directly to your original method of payment (or via bank transfer for Cash on Delivery orders) within <strong>5–7 business days</strong> following our warehouse inspection.
+        </p>
+      </div>
+
+      <div>
+        <h3 style="font-size:1.4rem;color:var(--primary);margin-bottom:10px;"><i class="bi bi-arrow-repeat"></i> Return & Exchange Process</h3>
+        <ol style="color:var(--text-muted);line-height:1.8;padding-left:20px;">
+          <li>Reach out to our support at <strong>curators@aditibohara.com.np</strong> with your Order Number (#BN-XXXX) and photos if damaged.</li>
+          <li>Our concierge will email you a prepaid return shipping slip within 24 hours.</li>
+          <li>Pack the book safely in the original protective box and drop it at your nearest logistics partner.</li>
+          <li>Upon receipt and verification, your replacement or refund is promptly released.</li>
+        </ol>
+      </div>
+
+      <div style="background:var(--bg-cream-soft);padding:20px;border-radius:var(--radius-md);border-left:4px solid var(--primary);">
+        <h4 style="font-size:1.1rem;margin-bottom:6px;">Questions regarding your order?</h4>
+        <p style="color:var(--text-muted);margin:0;font-size:0.95rem;">
+          Contact our dedicated team directly via our <a href="{% url 'core:contact' %}" style="color:var(--primary);font-weight:700;text-decoration:underline;">Contact Page</a> or email <strong>curators@aditibohara.com.np</strong>.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}

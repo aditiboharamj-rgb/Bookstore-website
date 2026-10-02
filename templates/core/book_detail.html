@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block title %}{{ book.title }} by {{ book.author.name }} - Book Nest{% endblock %}
+{% block meta_description %}{{ book.description|truncatewords:25 }}{% endblock %}
+
+{% block content %}
+<section style="padding:60px 0;">
+  <div class="nest-container">
+    
+    <!-- Breadcrumbs -->
+    <nav style="font-size:0.88rem;color:var(--text-muted);margin-bottom:30px;">
+      <a href="{% url 'core:home' %}">Home</a> &gt; 
+      <a href="{% url 'core:category_detail' slug=book.category.slug %}">{{ book.category.name }}</a> &gt; 
+      <span style="color:var(--text-main);font-weight:700;">{{ book.title }}</span>
+    </nav>
+
+    <!-- Main Book Product Layout -->
+    <div style="display:grid;grid-template-columns:380px 1fr;gap:60px;align-items:start;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:40px;box-shadow:var(--shadow-sm);">
+      
+      <!-- Book Cover & Quick Actions -->
+      <div>
+        <div style="aspect-ratio:2/3;border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-lg);border:1px solid var(--border-color);position:relative;">
+          <img src="{% if book.cover_image %}{{ book.cover_image.url }}{% else %}/static/images/default_cover.svg{% endif %}" alt="{{ book.title }}" style="width:100%;height:100%;object-fit:cover;">
+          {% if book.is_bestseller %}
+            <span class="book-badge-tag">Bestseller</span>
+          {% endif %}
+        </div>
+        
+        <div style="margin-top:20px;display:flex;gap:12px;">
+          <button class="btn-secondary ajax-toggle-fav {% if is_favorited %}active{% endif %}" data-book-id="{{ book.id }}" style="flex:1;justify-content:center;">
+            <i class="bi {% if is_favorited %}bi-heart-fill text-danger{% else %}bi-heart{% endif %}"></i>
+            <span>Favorite</span>
+          </button>
+          <a href="#reviews-section" class="btn-secondary" style="flex:1;justify-content:center;">
+            <i class="bi bi-pencil-square"></i>
+            <span>Rate & Review</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Book Info & Purchase Box -->
+      <div>
+        <span class="book-category-tag" style="font-size:0.9rem;">{{ book.category.name }}</span>
+        <h1 style="font-size:2.8rem;margin:6px 0 10px;">{{ book.title }}</h1>
+        <p style="font-size:1.2rem;color:var(--text-muted);margin-bottom:16px;">
+          By <strong style="color:var(--text-main);">{{ book.author.name }}</strong>
+        </p>
+
+        <!-- Rating Overview -->
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--border-color);">
+          <div style="color:var(--accent-gold);font-size:1.2rem;">
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-half"></i>
+          </div>
+          <span style="font-weight:800;font-size:1.1rem;">{{ book.average_rating }}</span>
+          <span style="color:var(--text-light);font-size:0.9rem;">({{ book.review_count }} verified reader reflections)</span>
+        </div>
+
+        <!-- Price -->
+        <div style="margin-bottom:24px;">
+          <span style="font-size:2.4rem;font-weight:800;color:var(--primary);">Rs. {{ book.discount_price|default:book.price }}</span>
+          {% if book.discount_price %}
+            <span class="book-discount-price" style="font-size:1.4rem;margin-left:10px;">Rs. {{ book.price }}</span>
+            <span style="background:var(--primary-light);color:var(--primary);padding:4px 8px;border-radius:4px;font-size:0.85rem;font-weight:700;margin-left:10px;">Special Offer</span>
+          {% endif %}
+        </div>
+
+        <!-- Description -->
+        <div style="color:var(--text-muted);font-size:1.05rem;line-height:1.8;margin-bottom:30px;">
+          {{ book.description|linebreaks }}
+        </div>
+
+        <!-- Meta specs -->
+        <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:16px;background:var(--bg-cream-soft);padding:18px;border-radius:var(--radius-md);margin-bottom:30px;">
+          <div>
+            <span style="font-size:0.75rem;color:var(--text-light);text-transform:uppercase;font-weight:700;">Pages</span>
+            <p style="font-weight:700;margin:0;">{{ book.pages }} Pages</p>
+          </div>
+          <div>
+            <span style="font-size:0.75rem;color:var(--text-light);text-transform:uppercase;font-weight:700;">Language</span>
+            <p style="font-weight:700;margin:0;">{{ book.language }}</p>
+          </div>
+          <div>
+            <span style="font-size:0.75rem;color:var(--text-light);text-transform:uppercase;font-weight:700;">In Stock</span>
+            <p style="font-weight:700;color:#059669;margin:0;">{{ book.stock }} Copies</p>
+          </div>
+        </div>
+
+        <!-- Add to Cart Form -->
+        <form action="{% url 'core:cart_add' book_id=book.id %}" method="POST" style="display:flex;gap:16px;align-items:center;">
+          {% csrf_token %}
+          <div style="display:flex;align-items:center;border:1px solid var(--border-color);border-radius:var(--radius-full);background:var(--bg-card);padding:4px 8px;">
+            <label for="quantity" style="font-size:0.85rem;font-weight:700;margin-right:8px;padding-left:8px;">Qty:</label>
+            <input type="number" id="quantity" name="quantity" value="1" min="1" max="{{ book.stock }}" style="width:50px;border:none;background:transparent;text-align:center;font-weight:700;outline:none;">
+          </div>
+
+          <button type="submit" class="btn-primary" style="padding:14px 36px;font-size:1.05rem;">
+            <i class="bi bi-cart-plus"></i> Add to Cart
+          </button>
+        </form>
+
+      </div>
+    </div>
+
+    <!-- Reader Reviews & Rating Section -->
+    <section id="reviews-section" style="margin-top:60px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:40px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;border-bottom:1px solid var(--border-color);padding-bottom:16px;">
+        <div>
+          <span class="book-category-tag">Customer Thoughts</span>
+          <h2 style="font-size:2rem;margin:0;">Reader Reviews & Reflections</h2>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.2fr 0.8fr;gap:50px;">
+        
+        <!-- Existing Reviews List -->
+        <div>
+          {% for rev in reviews %}
+            <div style="padding:20px;border-radius:var(--radius-md);border:1px solid var(--border-color);background:var(--bg-cream);margin-bottom:18px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div style="width:36px;height:36px;border-radius:50%;background:var(--primary);color:#FFF;display:flex;align-items:center;justify-content:center;font-weight:700;">
+                    {{ rev.customer_name|slice:":1" }}
+                  </div>
+                  <div>
+                    <h4 style="font-size:0.95rem;margin:0;font-weight:700;">{{ rev.customer_name }}</h4>
+                    <span style="font-size:0.75rem;color:var(--text-light);">{{ rev.created_at|date:"M d, Y" }}</span>
+                  </div>
+                </div>
+                <div style="color:var(--accent-gold);font-size:0.9rem;">
+                  {% for i in "12345"|make_list %}
+                    {% if forloop.counter <= rev.rating %}
+                      <i class="bi bi-star-fill"></i>
+                    {% else %}
+                      <i class="bi bi-star"></i>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+              <p style="color:var(--text-muted);font-size:0.95rem;line-height:1.6;margin-bottom:12px;">
+                {{ rev.comment }}
+              </p>
+              <div style="display:flex;align-items:center;gap:12px;">
+                <button onclick="markHelpful({{ rev.id }}, this)" class="btn-secondary" style="padding:4px 12px;font-size:0.8rem;border-radius:var(--radius-full);">
+                  <i class="bi bi-hand-thumbs-up"></i> Helpful (<span class="helpful-num">{{ rev.helpful_count }}</span>)
+                </button>
+              </div>
+            </div>
+          {% empty %}
+            <p style="color:var(--text-muted);font-style:italic;">No reviews written yet. Be the first reader to share your reflection on this book!</p>
+          {% endfor %}
+        </div>
+
+        <!-- Write a Review Form -->
+        <div style="background:var(--bg-cream-soft);padding:28px;border-radius:var(--radius-md);border:1px solid var(--border-color);height:fit-content;">
+          <h3 style="font-size:1.3rem;margin-bottom:16px;">Write Your Review</h3>
+          <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:18px;">How was your journey reading this book? Share your genuine thoughts with our literary community.</p>
+
+          <form action="{% url 'core:add_review' book_id=book.id %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div style="margin-bottom:14px;">
+              <label style="font-size:0.85rem;font-weight:700;display:block;margin-bottom:6px;">Your Name</label>
+              <input type="text" name="customer_name" required placeholder="e.g. Evelyn Reed" style="width:100%;padding:10px;border-radius:var(--radius-sm);border:1px solid var(--border-color);outline:none;">
+            </div>
+
+            <div style="margin-bottom:14px;">
+              <label style="font-size:0.85rem;font-weight:700;display:block;margin-bottom:6px;">Rating (1 to 5 Stars)</label>
+              <select name="rating" style="width:100%;padding:10px;border-radius:var(--radius-sm);border:1px solid var(--border-color);background:#FFF;outline:none;">
+                <option value="5">⭐⭐⭐⭐⭐ - 5 Stars (Masterpiece)</option>
+                <option value="4">⭐⭐⭐⭐ - 4 Stars (Great Read)</option>
+                <option value="3">⭐⭐⭐ - 3 Stars (Good)</option>
+                <option value="2">⭐⭐ - 2 Stars (Average)</option>
+                <option value="1">⭐ - 1 Star (Not for me)</option>
+              </select>
+            </div>
+
+            <div style="margin-bottom:18px;">
+              <label style="font-size:0.85rem;font-weight:700;display:block;margin-bottom:6px;">Your Reflection</label>
+              <textarea name="comment" required rows="4" placeholder="What resonated with you most in this book?" style="width:100%;padding:10px;border-radius:var(--radius-sm);border:1px solid var(--border-color);outline:none;font-family:inherit;"></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary" style="width:100%;justify-content:center;">
+              Submit Review
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+async function markHelpful(reviewId, btn) {
+  try {
+    const res = await fetch(`/review/${reviewId}/helpful/`, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': csrftoken,
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    });
+    const data = await res.json();
+    if (data.success) {
+      btn.querySelector('.helpful-num').textContent = data.helpful_count;
+      btn.disabled = true;
+      showToast('Marked review as helpful 👍');
+    }
+  } catch(e) {
+    console.error(e);
+  }
+}
+</script>
+{% endblock %}

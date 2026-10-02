@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}My Saved Favorites & Reviews - Book Nest{% endblock %}
+
+{% block content %}
+<section style="padding:50px 0 30px;background:var(--bg-cream-soft);border-bottom:1px solid var(--border-color);">
+  <div class="nest-container">
+    <span class="book-category-tag">Customer Vault</span>
+    <h1 style="font-size:2.8rem;margin-bottom:8px;">My Favorites & Book Reviews</h1>
+    <p style="color:var(--text-muted);">Books you have bookmarked to read, rate, or review based on your journey.</p>
+  </div>
+</section>
+
+<section style="padding:60px 0;">
+  <div class="nest-container">
+    {% if favorites %}
+      <div class="book-grid">
+        {% for fav in favorites %}
+          <div class="book-card">
+            <div class="book-cover-wrap">
+              <span class="book-badge-tag" style="background:#E11D48;"><i class="bi bi-heart-fill"></i> Saved</span>
+              <a href="{% url 'core:book_detail' slug=fav.book.slug %}">
+                <img src="{% if fav.book.cover_image %}{{ fav.book.cover_image.url }}{% else %}/static/images/default_cover.svg{% endif %}" alt="{{ fav.book.title }}" class="book-cover-img" loading="lazy">
+              </a>
+            </div>
+
+            <div class="book-category-tag">{{ fav.book.category.name }}</div>
+            <h3 class="book-card-title"><a href="{% url 'core:book_detail' slug=fav.book.slug %}">{{ fav.book.title }}</a></h3>
+            <p class="book-card-author">{{ fav.book.author.name }}</p>
+
+            <div class="book-rating">
+              <i class="bi bi-star-fill"></i>
+              <span>{{ fav.book.average_rating }}</span>
+              <span style="color:var(--text-light);font-size:0.75rem;">({{ fav.book.review_count }})</span>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:auto;padding-top:14px;border-top:1px solid var(--bg-cream-soft);">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <span class="book-price">Rs. {{ fav.book.discount_price|default:fav.book.price }}</span>
+                <button class="btn-primary ajax-add-cart" data-book-id="{{ fav.book.id }}" style="padding:6px 12px;font-size:0.82rem;">
+                  <i class="bi bi-cart-plus"></i> Add
+                </button>
+              </div>
+
+              <div style="display:flex;gap:6px;">
+                <a href="{% url 'core:book_detail' slug=fav.book.slug %}#reviews-section" class="btn-secondary" style="flex:1;justify-content:center;padding:6px 8px;font-size:0.78rem;">
+                  <i class="bi bi-pencil-square"></i> Rate / Review
+                </a>
+                <button class="btn-secondary ajax-toggle-fav active" data-book-id="{{ fav.book.id }}" style="padding:6px 10px;font-size:0.8rem;color:#E11D48;" title="Remove from favorites">
+                  <i class="bi bi-trash3"></i>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div style="text-align:center;padding:80px 20px;background:var(--bg-card);border-radius:var(--radius-lg);border:1px dashed var(--border-color);max-width:600px;margin:0 auto;">
+        <div style="width:70px;height:70px;background:#FFE4E6;color:#E11D48;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 20px;">
+          <i class="bi bi-heart"></i>
+        </div>
+        <h2 style="font-size:1.8rem;margin-bottom:10px;">No Saved Favorites Yet</h2>
+        <p style="color:var(--text-muted);margin-bottom:24px;">Click the heart icon on any book while browsing to save it to your reading wishlist.</p>
+        <a href="{% url 'core:category_list' %}" class="btn-primary">Browse Sanctuary Collection</a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

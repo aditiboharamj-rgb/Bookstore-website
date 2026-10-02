@@ -1,0 +1,416 @@
+{% extends "base.html" %}
+
+{% block title %}Book Nest - Warm, Literary & Modern Bookstore{% endblock %}
+
+{% block content %}
+<!-- Modern Wide Literary Showcase Hero Section (Matching Reference Style) -->
+<section class="hero-showcase-section">
+  <div class="hero-slider-container">
+    <button class="hero-nav-arrow hero-nav-prev" onclick="changeHeroSlide(-1)" aria-label="Previous Slide">
+      <i class="bi bi-chevron-left"></i>
+    </button>
+    <button class="hero-nav-arrow hero-nav-next" onclick="changeHeroSlide(1)" aria-label="Next Slide">
+      <i class="bi bi-chevron-right"></i>
+    </button>
+
+    <div class="hero-slider-track">
+      <!-- Slide 1: Trending This Week -->
+      <div class="hero-slide active" data-slide="0">
+        <div class="hero-book-showcase-left">
+          <a href="{% url 'core:category_list' %}?sort=bestseller" class="hero-book-tilt">
+            <img src="/media/books/covers/sapiens_cover_bGnFznf.jpg" alt="Sapiens - Yuval Noah Harari" loading="eager">
+          </a>
+        </div>
+
+        <div class="hero-center-content">
+          <span class="hero-tagline">Book Nest Curations</span>
+          <h1 class="hero-main-heading">Trending This Week</h1>
+          <a href="{% url 'core:category_list' %}" class="hero-shop-btn">
+            <span>Shop Now</span>
+            <i class="bi bi-chevron-right"></i>
+          </a>
+        </div>
+
+        <div class="hero-book-showcase-right">
+          <a href="{% url 'core:category_list' %}?sort=newest" class="hero-book-tilt hero-book-tilt-right">
+            <img src="/media/books/covers/norwegian-wood_ol_gbEZfzK.jpg" alt="Norwegian Wood - Haruki Murakami" loading="eager">
+          </a>
+        </div>
+      </div>
+
+      <!-- Slide 2: Best of Fiction & Fantasy -->
+      <div class="hero-slide" data-slide="1">
+        <div class="hero-book-showcase-left">
+          <a href="{% url 'core:category_list' %}" class="hero-book-tilt">
+            <img src="/media/books/covers/fellowship-of-the-ring_real_CxWxEAw.jpg" alt="The Fellowship of the Ring" loading="lazy">
+          </a>
+        </div>
+
+        <div class="hero-center-content">
+          <span class="hero-tagline">Literary Masterpieces</span>
+          <h1 class="hero-main-heading">Timeless Classics</h1>
+          <a href="{% url 'core:category_list' %}" class="hero-shop-btn">
+            <span>Explore Vault</span>
+            <i class="bi bi-chevron-right"></i>
+          </a>
+        </div>
+
+        <div class="hero-book-showcase-right">
+          <a href="{% url 'core:category_list' %}" class="hero-book-tilt hero-book-tilt-right">
+            <img src="/media/books/covers/atomic-habits_real_98b05sm.jpg" alt="Atomic Habits - James Clear" loading="lazy">
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dots -->
+    <div class="hero-slider-dots">
+      <span class="hero-dot active" onclick="goToHeroSlide(0)"></span>
+      <span class="hero-dot" onclick="goToHeroSlide(1)"></span>
+    </div>
+  </div>
+</section>
+
+<!-- Features Highlight Strip Below Hero (Fast Delivery, Best Prices, Click & Collect) -->
+<div class="hero-features-bar">
+  <div class="nest-container">
+    <div class="hero-features-grid">
+      <div class="hero-feature-item">
+        <i class="bi bi-box-seam hero-feature-icon"></i>
+        <span class="hero-feature-title">Fast Delivery</span>
+      </div>
+      <div class="hero-feature-item">
+        <i class="bi bi-gift hero-feature-icon"></i>
+        <span class="hero-feature-title">Best Prices & Offers</span>
+      </div>
+      <div class="hero-feature-item">
+        <i class="bi bi-shop hero-feature-icon"></i>
+        <span class="hero-feature-title">Click & Collect</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Book of the Week Spotlight Section -->
+{% if book_of_the_week %}
+<section style="padding:50px 0;background:var(--bg-cream-soft);border-top:1px solid var(--border-color);border-bottom:1px solid var(--border-color);">
+  <div class="nest-container">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:30px;">
+      <span style="background:var(--accent-gold);color:#FFF;padding:4px 12px;border-radius:var(--radius-full);font-size:0.75rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;">Curator's Choice</span>
+      <h2 style="font-size:1.8rem;margin:0;">Book of the Week</h2>
+    </div>
+
+    <div style="background:var(--bg-card);border-radius:var(--radius-lg);border:1px solid var(--border-color);padding:36px;display:grid;grid-template-columns:300px 1fr;gap:40px;align-items:center;box-shadow:var(--shadow-sm);">
+      <div style="aspect-ratio:2/3;border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-md);border:1px solid var(--border-color);">
+        <img src="{% if book_of_the_week.cover_image %}{{ book_of_the_week.cover_image.url }}{% else %}/static/images/default_cover.svg{% endif %}" alt="{{ book_of_the_week.title }}" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+      <div>
+        <span class="book-category-tag">{{ book_of_the_week.category.name }}</span>
+        <h3 style="font-size:2.2rem;margin-bottom:8px;">{{ book_of_the_week.title }}</h3>
+        <p style="font-size:1.1rem;color:var(--text-muted);margin-bottom:16px;">By <strong>{{ book_of_the_week.author.name }}</strong></p>
+        
+        <div class="book-rating" style="margin-bottom:18px;">
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-half"></i>
+          <span style="color:var(--text-main);font-weight:700;margin-left:6px;">{{ book_of_the_week.average_rating }}</span>
+          <span style="color:var(--text-light);font-size:0.85rem;">({{ book_of_the_week.review_count }} reader reviews)</span>
+        </div>
+
+        <p style="color:var(--text-muted);font-size:1rem;line-height:1.7;margin-bottom:24px;">
+          {{ book_of_the_week.description|truncatewords:45 }}
+        </p>
+
+        <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
+          <div>
+            <span style="font-size:1.8rem;font-weight:800;color:var(--text-main);">Rs. {{ book_of_the_week.discount_price|default:book_of_the_week.price }}</span>
+            {% if book_of_the_week.discount_price %}
+              <span class="book-discount-price" style="font-size:1.1rem;">Rs. {{ book_of_the_week.price }}</span>
+            {% endif %}
+          </div>
+          <button class="btn-primary ajax-add-cart" data-book-id="{{ book_of_the_week.id }}">
+            <i class="bi bi-cart-plus"></i> Add to Basket
+          </button>
+          <a href="{% url 'core:book_detail' slug=book_of_the_week.slug %}" class="btn-secondary">
+            View Details
+          </a>
+          <button class="btn-icon ajax-toggle-fav" data-book-id="{{ book_of_the_week.id }}" title="Add to Favorites">
+            <i class="bi bi-heart"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Best Sellers Section -->
+<section style="padding:80px 0;">
+  <div class="nest-container">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:36px;">
+      <div>
+        <span class="book-category-tag">Community Favorites</span>
+        <h2 style="font-size:2.2rem;margin:0;">Bestsellers Collection</h2>
+      </div>
+      <a href="{% url 'core:category_list' %}?sort=bestseller" class="btn-secondary" style="padding:8px 20px;font-size:0.88rem;">
+        View All <i class="bi bi-arrow-right ms-1"></i>
+      </a>
+    </div>
+
+    <div class="book-grid">
+      {% for book in bestsellers %}
+        <div class="book-card">
+          <div class="book-cover-wrap">
+            <span class="book-badge-tag">Bestseller</span>
+            <button class="card-fav-btn ajax-toggle-fav" data-book-id="{{ book.id }}" title="Favorite">
+              <i class="bi bi-heart"></i>
+            </button>
+            <a href="{% url 'core:book_detail' slug=book.slug %}">
+              <img src="{% if book.cover_image %}{{ book.cover_image.url }}{% else %}/static/images/default_cover.svg{% endif %}" alt="{{ book.title }}" class="book-cover-img" loading="lazy">
+            </a>
+          </div>
+
+          <div class="book-category-tag">{{ book.category.name }}</div>
+          <h3 class="book-card-title"><a href="{% url 'core:book_detail' slug=book.slug %}">{{ book.title }}</a></h3>
+          <p class="book-card-author">{{ book.author.name }}</p>
+
+          <div class="book-rating">
+            <i class="bi bi-star-fill"></i>
+            <span>{{ book.average_rating }}</span>
+            <span style="color:var(--text-light);font-size:0.75rem;">({{ book.review_count }})</span>
+          </div>
+
+          <div class="book-price-row">
+            <div>
+              <span class="book-price">Rs. {{ book.discount_price|default:book.price }}</span>
+              {% if book.discount_price %}
+                <span class="book-discount-price">Rs. {{ book.price }}</span>
+              {% endif %}
+            </div>
+            <button class="btn-primary ajax-add-cart" data-book-id="{{ book.id }}" style="padding:8px 14px;font-size:0.85rem;" title="Add to Cart">
+              <i class="bi bi-cart-plus"></i> Add
+            </button>
+          </div>
+        </div>
+      {% empty %}
+        <p>Bestseller books are being curated.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- New Arrivals Section -->
+<section style="padding:80px 0;background:var(--bg-cream-soft);" class="reveal-on-scroll">
+  <div class="nest-container">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:36px;">
+      <div>
+        <span class="book-category-tag">Fresh off the Press</span>
+        <h2 style="font-size:2.2rem;margin:0;">New Arrivals</h2>
+      </div>
+      <a href="{% url 'core:category_list' %}?sort=newest" class="btn-secondary" style="padding:8px 20px;font-size:0.88rem;">
+        View All <i class="bi bi-arrow-right ms-1"></i>
+      </a>
+    </div>
+
+    <div class="book-grid">
+      {% for book in new_arrivals %}
+        <div class="book-card">
+          <div class="book-cover-wrap">
+            <span class="book-badge-tag" style="background:#059669;">New</span>
+            <button class="card-fav-btn ajax-toggle-fav" data-book-id="{{ book.id }}" title="Favorite">
+              <i class="bi bi-heart"></i>
+            </button>
+            <a href="{% url 'core:book_detail' slug=book.slug %}">
+              <img src="{% if book.cover_image %}{{ book.cover_image.url }}{% else %}/static/images/default_cover.svg{% endif %}" alt="{{ book.title }}" class="book-cover-img" loading="lazy">
+            </a>
+          </div>
+
+          <div class="book-category-tag">{{ book.category.name }}</div>
+          <h3 class="book-card-title"><a href="{% url 'core:book_detail' slug=book.slug %}">{{ book.title }}</a></h3>
+          <p class="book-card-author">{{ book.author.name }}</p>
+
+          <div class="book-rating">
+            <i class="bi bi-star-fill"></i>
+            <span>{{ book.average_rating }}</span>
+            <span style="color:var(--text-light);font-size:0.75rem;">({{ book.review_count }})</span>
+          </div>
+
+          <div class="book-price-row">
+            <div>
+              <span class="book-price">Rs. {{ book.discount_price|default:book.price }}</span>
+              {% if book.discount_price %}
+                <span class="book-discount-price">Rs. {{ book.price }}</span>
+              {% endif %}
+            </div>
+            <button class="btn-primary ajax-add-cart" data-book-id="{{ book.id }}" style="padding:8px 14px;font-size:0.85rem;" title="Add to Cart">
+              <i class="bi bi-cart-plus"></i> Add
+            </button>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Dedicated Nepali Literature Section (नेपाली साहित्य) -->
+<section style="padding:85px 0;background:var(--bg-card);border-top:1px solid var(--border-color);border-bottom:1px solid var(--border-color);" class="reveal-on-scroll">
+  <div class="nest-container">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:36px;">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+          <span class="nepali-badge">नेपाली साहित्य</span>
+          <span class="book-category-tag" style="margin:0;">Himalayan Classics & Madan Puraskar Winners</span>
+        </div>
+        <h2 style="font-size:2.3rem;margin:0;">Treasures of Nepali Literature</h2>
+      </div>
+      <a href="{% url 'core:category_detail' slug='nepali-literature' %}" class="btn-secondary" style="padding:8px 20px;font-size:0.88rem;">
+        Explore All Nepali Works <i class="bi bi-arrow-right ms-1"></i>
+      </a>
+    </div>
+
+    <div class="book-grid">
+      {% for book in nepali_books %}
+        <div class="book-card">
+          <div class="book-cover-wrap">
+            <span class="book-badge-tag" style="background:#B91C1C;">Classic</span>
+            <button class="card-fav-btn ajax-toggle-fav" data-book-id="{{ book.id }}" title="Favorite">
+              <i class="bi bi-heart"></i>
+            </button>
+            <a href="{% url 'core:book_detail' slug=book.slug %}">
+              <img src="{% if book.cover_image %}{{ book.cover_image.url }}{% else %}/static/images/default_cover.svg{% endif %}" alt="{{ book.title }}" class="book-cover-img" loading="lazy">
+            </a>
+          </div>
+
+          <div class="book-category-tag" style="color:#B91C1C;">{{ book.category.name }}</div>
+          <h3 class="book-card-title"><a href="{% url 'core:book_detail' slug=book.slug %}">{{ book.title }}</a></h3>
+          <p class="book-card-author">{{ book.author.name }}</p>
+
+          <div class="book-rating">
+            <i class="bi bi-star-fill"></i>
+            <span>{{ book.average_rating }}</span>
+            <span style="color:var(--text-light);font-size:0.75rem;">({{ book.review_count }})</span>
+          </div>
+
+          <div class="book-price-row">
+            <div>
+              <span class="book-price">Rs. {{ book.discount_price|default:book.price }}</span>
+              {% if book.discount_price %}
+                <span class="book-discount-price">Rs. {{ book.price }}</span>
+              {% endif %}
+            </div>
+            <button class="btn-primary ajax-add-cart" data-book-id="{{ book.id }}" style="padding:8px 14px;font-size:0.85rem;" title="Add to Cart">
+              <i class="bi bi-cart-plus"></i> Add
+            </button>
+          </div>
+        </div>
+      {% empty %}
+        <p>Curating authentic Nepali titles.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Promotional Kids Feature Banner (Matching Reference Image 2) -->
+<section class="kids-promo-section reveal-on-scroll">
+  <div class="nest-container">
+    <div class="kids-promo-card">
+      <div class="kids-promo-image-wrap">
+        <img src="https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&w=1400&q=80" alt="Introducing Kids Category" loading="lazy">
+      </div>
+      <div class="kids-promo-banner-content">
+        <h2 class="kids-promo-title">Introducing Kids Category</h2>
+        <p class="kids-promo-subtitle">
+          Ignite young imaginations with illustrated fairy tales, learning adventures, and puzzle books for curious little minds!
+        </p>
+        <a href="{% url 'core:category_detail' slug='childrens-book' %}" class="kids-promo-btn">
+          <span>Shop Now!</span>
+          <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Happy Customers Continuous Horizontal Reviews Marquee -->
+<section style="padding:90px 0;background:var(--bg-cream);">
+  <div class="nest-container" style="text-align:center;margin-bottom:30px;">
+    <span class="book-category-tag">Community Reflections</span>
+    <h2 style="font-size:2.4rem;">Loved by Readers Everywhere</h2>
+    <p style="color:var(--text-muted);max-width:550px;margin:10px auto 0;">Real impressions from our sanctuary of passionate bookworms.</p>
+  </div>
+
+  <div class="reviews-marquee-wrapper">
+    <div class="reviews-track">
+      <!-- Original Reviews -->
+      {% for review in happy_reviews %}
+        <div class="review-bubble-card">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+            <div style="width:44px;height:44px;border-radius:50%;background:var(--primary-light);color:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.1rem;">
+              {{ review.customer_name|slice:":1" }}
+            </div>
+            <div>
+              <h4 style="font-size:0.95rem;font-weight:700;margin:0;">{{ review.customer_name }}</h4>
+              <span style="font-size:0.75rem;color:var(--text-light);">Verified Reader</span>
+            </div>
+          </div>
+          <div style="color:var(--accent-gold);margin-bottom:10px;font-size:0.9rem;">
+            {% for i in "12345"|make_list %}
+              {% if forloop.counter <= review.rating %}
+                <i class="bi bi-star-fill"></i>
+              {% else %}
+                <i class="bi bi-star"></i>
+              {% endif %}
+            {% endfor %}
+          </div>
+          <p style="font-size:0.92rem;color:var(--text-muted);line-height:1.6;margin-bottom:12px;">
+            "{{ review.comment }}"
+          </p>
+          <div style="font-size:0.8rem;color:var(--text-light);font-style:italic;">
+            on <strong>{{ review.book.title }}</strong>
+          </div>
+        </div>
+      {% empty %}
+        <div class="review-bubble-card">
+          <p style="color:var(--text-muted);">"Book Nest is truly a sanctuary for literature enthusiasts. Fast delivery and pristine packaging!"</p>
+          <strong>- Clara Montgomery</strong>
+        </div>
+      {% endfor %}
+
+      <!-- Duplicated for Continuous Loop -->
+      {% for review in happy_reviews %}
+        <div class="review-bubble-card">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+            <div style="width:44px;height:44px;border-radius:50%;background:var(--primary-light);color:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.1rem;">
+              {{ review.customer_name|slice:":1" }}
+            </div>
+            <div>
+              <h4 style="font-size:0.95rem;font-weight:700;margin:0;">{{ review.customer_name }}</h4>
+              <span style="font-size:0.75rem;color:var(--text-light);">Verified Reader</span>
+            </div>
+          </div>
+          <div style="color:var(--accent-gold);margin-bottom:10px;font-size:0.9rem;">
+            {% for i in "12345"|make_list %}
+              {% if forloop.counter <= review.rating %}
+                <i class="bi bi-star-fill"></i>
+              {% else %}
+                <i class="bi bi-star"></i>
+              {% endif %}
+            {% endfor %}
+          </div>
+          <p style="font-size:0.92rem;color:var(--text-muted);line-height:1.6;margin-bottom:12px;">
+            "{{ review.comment }}"
+          </p>
+          <div style="font-size:0.8rem;color:var(--text-light);font-style:italic;">
+            on <strong>{{ review.book.title }}</strong>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

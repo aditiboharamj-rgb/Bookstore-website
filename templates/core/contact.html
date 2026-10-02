@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - Book Nest Literary Sanctuary{% endblock %}
+
+{% block content %}
+<section style="padding:60px 0 40px;background:var(--bg-cream-soft);border-bottom:1px solid var(--border-color);">
+  <div class="nest-container">
+    <div style="max-width:700px;">
+      <span class="book-category-tag">Get in Touch</span>
+      <h1 style="font-size:3rem;margin-bottom:12px;">We'd Love to Hear From You</h1>
+      <p style="font-size:1.15rem;color:var(--text-muted);">
+        Have a book request, a query about your order, or just want to discuss literature? Send our curation team a message.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section style="padding:70px 0;">
+  <div class="nest-container">
+    <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:60px;">
+      
+      <!-- Contact Form -->
+      <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:36px;box-shadow:var(--shadow-sm);">
+        <h2 style="font-size:1.6rem;margin-bottom:24px;">Send a Direct Note</h2>
+
+        <form method="POST" action="{% url 'core:contact' %}">
+          {% csrf_token %}
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;">
+            <div>
+              <label style="font-size:0.85rem;font-weight:700;display:block;margin-bottom:6px;">Your Name</label>
+              <input type="text" name="name" required placeholder="e.g. Aditi Bohara" style="width:100%;padding:10px;border-radius:var(--radius-sm);border:1px solid var(--border-color);outline:none;">
+            </div>
+            <div>
+              <label style="font-size:0.85rem;font-weight:700;display:block;margin-bottom:6px;">Email Address</label>
+              <input type="email" name="email" required placeholder="e.g. aditi@example.com" style="width:100%;padding:10px;border-radius:var(--radius-sm);border:1px solid var(--border-color);outline:none;">
+            </div>
+          </div>
+
+          <div style="margin-bottom:18px;">
+            <label style="font-size:0.85rem;font-weight:700;display:block;margin-bottom:6px;">Subject</label>
+            <input type="text" name="subject" required placeholder="e.g. Book Inquiry / Special Edition Request" style="width:100%;padding:10px;border-radius:var(--radius-sm);border:1px solid var(--border-color);outline:none;">
+          </div>
+
+          <div style="margin-bottom:24px;">
+            <label style="font-size:0.85rem;font-weight:700;display:block;margin-bottom:6px;">Your Message</label>
+            <textarea name="message" required rows="5" placeholder="Share your inquiry or book recommendations with us..." style="width:100%;padding:10px;border-radius:var(--radius-sm);border:1px solid var(--border-color);outline:none;font-family:inherit;"></textarea>
+          </div>
+
+          <button type="submit" class="btn-primary" style="padding:12px 32px;font-size:1rem;">
+            <i class="bi bi-send-fill"></i> Send Message
+          </button>
+        </form>
+      </div>
+
+      <!-- Contact Information & Socials -->
+      <div style="display:flex;flex-direction:column;gap:24px;">
+        <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:30px;box-shadow:var(--shadow-sm);">
+          <h3 style="font-size:1.3rem;margin-bottom:20px;border-bottom:1px solid var(--border-color);padding-bottom:10px;">Contact Details</h3>
+          
+          <div style="display:flex;gap:16px;margin-bottom:20px;">
+            <div style="width:44px;height:44px;background:var(--primary-light);color:var(--primary);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;">
+              <i class="bi bi-geo-alt-fill"></i>
+            </div>
+            <div>
+              <h4 style="font-size:1rem;margin-bottom:2px;">Literary Sanctuary</h4>
+              <p style="color:var(--text-muted);font-size:0.9rem;margin:0;">42 Bookworm Lane, Kathmandu / Global Dispatch</p>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:16px;margin-bottom:20px;">
+            <div style="width:44px;height:44px;background:var(--primary-light);color:var(--primary);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;">
+              <i class="bi bi-envelope-fill"></i>
+            </div>
+            <div>
+              <h4 style="font-size:1rem;margin-bottom:2px;">Email Inquiries</h4>
+              <p style="color:var(--text-muted);font-size:0.9rem;margin:0;">curators@aditibohara.com.np</p>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:16px;">
+            <div style="width:44px;height:44px;background:var(--primary-light);color:var(--primary);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;">
+              <i class="bi bi-telephone-fill"></i>
+            </div>
+            <div>
+              <h4 style="font-size:1rem;margin-bottom:2px;">Customer Support</h4>
+              <p style="color:var(--text-muted);font-size:0.9rem;margin:0;">+977 (01) 425-BOOK / +1 (800) 902-NEST</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:var(--bg-cream-soft);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:24px;">
+          <h4 style="font-size:1.1rem;margin-bottom:12px;">Connect on Literary Channels</h4>
+          <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:16px;">Follow author AMAs, reading sprints, and seasonal catalog releases.</p>
+          <div style="display:flex;gap:10px;">
+            <a href="https://aditibohara.com.np" target="_blank" class="btn-secondary" style="font-size:0.85rem;padding:8px 14px;">
+              <i class="bi bi-globe"></i> Official Site
+            </a>
+            <a href="#" class="btn-secondary" style="font-size:0.85rem;padding:8px 14px;">
+              <i class="bi bi-instagram"></i> Instagram
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}
